@@ -1,7 +1,6 @@
 # Tbeautify-for-Typecho
 十大特效美化插件，简称：Tbeautify。
 包含春节灯笼，网站置灰，鼠标点击效果，悬浮音乐播放器，看板娘等诸多特效！后续会不断新增更多特效~敬请关注
-github开源地址：[https://github.com/1997akkk/Tbeautify][1]
 
 ### 使用方法
 
