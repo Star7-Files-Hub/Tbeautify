@@ -61,7 +61,7 @@ function addStyles() {
     style.type = 'text/css';
     style.textContent = `
         .deng-container {
-            position: relative;
+            position: fixed;
             top: 10px;
             opacity: 0.9;
             z-index: 9999;
