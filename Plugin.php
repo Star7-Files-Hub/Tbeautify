@@ -4,7 +4,7 @@
  * 
  * @package Tbeautify
  * @author 流情
- * @version 1.0.0
+ * @version 1.0.2
  * @update: 2011.06.07
  * @link https://liuqingwushui.top/
  */
