@@ -1,6 +1,6 @@
 <?php
 /**
- * 网站美化：包含春节灯笼，网站置灰，鼠标点击效果，悬浮音乐播放器，看板娘等诸多特效！
+ * 网站美化：包含春节灯笼，网站置灰，鼠标点击效果，语言国际化，悬浮音乐播放器，看板娘等诸多特效！
  * 
  * @package Tbeautify
  * @author 流情
@@ -60,6 +60,17 @@ HTML;
         $cherry = new Typecho_Widget_Helper_Form_Element_Radio("cherry", ['关闭', '开启'], 0, '樱花飘落特效：', '提示：会影响到阅读体验，视情况开启');
         $form->addInput($cherry);
         
+         //国际化
+        $languageTitle = new Typecho_Widget_Helper_Layout();
+        $languageTitle->html('<h3>语言国际化:</h3><p style="font-family:arial; background:#E8EFD1; padding:8px">本功能由translate.js实现翻译，支持数十种语言.全程由js控制,动态实时请求翻译,无需改动页面、无语言配置文件、无API Key.因动态请求翻译,可能会影响到加载速度.视情况选择是否开启</p>');
+        $form->addItem($languageTitle);
+        $languageOn = new Typecho_Widget_Helper_Form_Element_Radio('languageOn', ['关闭', '开启'], 0, '是否开启语言国际化','开启后,会自动进行国际化语言转化,使用说明：https://gitee.com/mail_osc/translate/');
+        $form->addInput($languageOn);
+        $languageshow = new Typecho_Widget_Helper_Form_Element_Checkbox('languageshow', array('languageshow' => '隐藏'), array('languageshow'), '是否隐藏语言选择下拉','前台是否隐藏语言下拉选择,默认隐藏.如启动，则由前台手动控制转化语种,下方默认选择语言选项失效');
+        $form->addInput($languageshow);
+        require_once __DIR__ . '/static/language.php';
+        $languageUse = new Typecho_Widget_Helper_Form_Element_Select('languageUse',$language,'chinese_simplified','选择语言','选择你想要转化的国际化语言,将应用到整站');
+        $form->addInput($languageUse);
         //设置鼠标点击效果
         $mouseTitle = new Typecho_Widget_Helper_Layout();
         $mouseTitle->html('<h3>鼠标点击特效配置:</h3>');
@@ -150,6 +161,46 @@ HTML;
              echo <<<HTML
     <div id="xf-MusicPlayer" data-random="true" data-cdnName="https://player.xfyun.club/js" data-themeColor="{$musictheme}"  data-memory="1"></div>
     <script src="https://player.xfyun.club/js/xf-MusicPlayer/js/xf-MusicPlayer.min.js"></script>
+HTML;
+        }
+        //语言国际化
+        $languageOn = Helper::options()->plugin('Tbeautify')->languageOn;
+        $languageshow = Helper::options()->plugin('Tbeautify')->languageshow;
+        $languageUse = Helper::options()->plugin('Tbeautify')->languageUse;
+        if($languageOn==1){
+            $languageshowBoolean = $languageshow ? 'false' : 'true';
+            echo <<<HTML
+    <script src="https://cdn.staticfile.net/translate.js/3.3.0/translate.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            translate.service.use('client.edge'); 
+            try{ 
+                translate.listener.start();
+                translate.selectLanguageTag.show = {$languageshowBoolean}; // 隐藏语言选择按钮
+                translate.language.setLocal('chinese_simplified');
+                if(!translate.selectLanguageTag.show){translate.changeLanguage('{$languageUse}')};  // 设置为英文
+                translate.language.clearCacheLanguage();   //清除历史翻译语种的缓存
+                translate.setAutoDiscriminateLocalLanguage();
+                translate.service.use('client.edge');
+                translate.language.setUrlParamControl(); 
+            }catch(e){ console.log(e); }
+            translate.execute();
+        })
+    </script>
+    <style>
+        #translate>.translateSelectLanguage {
+            position: absolute;
+            right: 2rem;
+            top: 2rem;
+            font-size: 1rem;
+            padding: 0.3rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            border: 1px solid #C9C9C9;
+            background-color: #fff;
+            color: #555;
+        }
+    </style>
 HTML;
         }
     }
