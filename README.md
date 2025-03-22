@@ -1,10 +1,10 @@
 # Tbeautify-for-Typecho
-十大特效美化插件，简称：Tbeautify。
+~~十大~~特效美化插件，简称：Tbeautify。
 包含春节灯笼，网站置灰，鼠标点击效果，语言国际化，悬浮音乐播放器，看板娘等诸多特效！后续会不断新增更多特效~敬请关注
 
 ### 使用方法
 
-1. 下载本插件，放在 usr/plugins/ 目录中，文件名命名为Tbeautify
+1. 下载本插件，放在 /usr/plugins/ 目录中，文件名命名为Tbeautify
 2. 登录管理后台，激活插件
 3. 开启你所想要的网站特效
 
@@ -19,7 +19,8 @@
 
  
 ### 开发日志
-
+- 1.0.3
+    - 接手项目，对悬浮音乐播放器进行功能增加
 - 1.0.2
     - 考虑到小红书，抖音涌入大量国际友人，秉着与国际与世界接轨的交流思想，增加国际化语言效果
     - 增加网站效果：语言国际化，支持数十种语言，由translate.js实现翻译，无需改动页面、无语言配置文件、无API Key
@@ -30,6 +31,5 @@
 
 ### 链接
 
-- Blog：https://liuqingwushui.com
-- Github: https://github.com/1997akkk
+- Github: https://github.com/Star7-Files-Hub
 
