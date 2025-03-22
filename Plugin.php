@@ -3,10 +3,11 @@
  * 网站美化：包含春节灯笼，网站置灰，鼠标点击效果，语言国际化，悬浮音乐播放器，看板娘等诸多特效！
  * 
  * @package Tbeautify
- * @author 流情
- * @version 1.0.2
- * @update: 2011.06.07
- * @link https://liuqingwushui.top/
+ * @author 7Star
+ * @version 1.0.3
+ * @dependence Typecho 1.2
+ * @update: 2025.03.21
+ * @link blog.843003.xyz
  */
 class Tbeautify_Plugin implements Typecho_Plugin_Interface
 {
@@ -44,8 +45,7 @@ class Tbeautify_Plugin implements Typecho_Plugin_Interface
         echo <<<HTML
             <div style="font-family:arial; background:#E8EFD1; padding:8px">
                 提示：本插件主要是<b style="color:#CF7000">针对全网站做静态资源引入起到美化的效果</b>，请针对性开启所需要的美化特效.<br>
-                多个美化特效开启可能会与网站已有的一些内容产生冲突造成未知影响。建议如网站已存在的功能特效不要重复开启.<br>
-                作者：流情(<a href="https://liuqingwushui.top" target="_blank">https://liuqingwushui.top</a>)
+                多个美化特效开启可能会与网站已有的一些内容产生冲突造成未知影响。建议如网站已存在的功能特效不要重复开启.
             </div>
 HTML;
         //春节灯笼特效
@@ -69,7 +69,12 @@ HTML;
         $languageshow = new Typecho_Widget_Helper_Form_Element_Checkbox('languageshow', array('languageshow' => '隐藏'), array('languageshow'), '是否隐藏语言选择下拉','前台是否隐藏语言下拉选择,默认隐藏.如启动，则由前台手动控制转化语种,下方默认选择语言选项失效');
         $form->addInput($languageshow);
         require_once __DIR__ . '/static/language.php';
-        $languageUse = new Typecho_Widget_Helper_Form_Element_Select('languageUse',$language,'chinese_simplified','选择语言','选择你想要转化的国际化语言,将应用到整站');
+        // 确保 $language 已定义
+        if (!isset($language)) {
+            $language = [];
+            trigger_error('变量 $language 未在 ' . __DIR__ . '/static/language.php 文件中定义', E_USER_WARNING);
+        }
+        $languageUse = new Typecho_Widget_Helper_Form_Element_Select('languageUse', $language, 'chinese_simplified', '选择语言','选择你想要转化的国际化语言,将应用到整站');
         $form->addInput($languageUse);
         //设置鼠标点击效果
         $mouseTitle = new Typecho_Widget_Helper_Layout();
@@ -99,6 +104,14 @@ HTML;
         );
         $musictheme = new Typecho_Widget_Helper_Form_Element_Select('musictheme', $mstyle, 'xf-original', '选择主题效果',"提供了多种不同主题色样式，请根据网站主题色选择契合的播放器主题色");
         $form->addInput($musictheme);
+        // $msource = array(
+            // '163' => '网易云音乐',
+            // 'local' => '本地'
+        // );
+        // $musicsource = new Typecho_Widget_Helper_Form_Element_Select('musicsource', $msource, '163', '选择音乐来源',"提供了多种不同音乐来源，请按需选择");
+        // $form->addInput($musicsource);
+        $userSongList = new Typecho_Widget_Helper_Form_Element_Text("songList", null, '', '网易云歌单ID：', '留空默认为作者的歌单，如使用本地源无需填写');
+        $form->addInput($userSongList);
         //看板娘
         $live2dTitle = new Typecho_Widget_Helper_Layout();
         $live2dTitle->html('<h3>看板娘模型配置:</h3>');
@@ -157,10 +170,13 @@ HTML;
         //悬浮音乐播放器
         $musictheme = Helper::options()->plugin('Tbeautify')->musictheme;
         $musicshow = Helper::options()->plugin('Tbeautify')->musicshow;
+        $userSongList = Helper::options()->plugin('Tbeautify')->songList;
+        $defaultSongList = '13468214363';
+        $songList = !empty($userSongList) ? $userSongList : $defaultSongList;
         if($musicshow){
              echo <<<HTML
-    <div id="xf-MusicPlayer" data-random="true" data-cdnName="https://player.xfyun.club/js" data-themeColor="{$musictheme}"  data-memory="1"></div>
-    <script src="https://player.xfyun.club/js/xf-MusicPlayer/js/xf-MusicPlayer.min.js"></script>
+    <div id="xf-MusicPlayer" data-cdnName="https://7star.131.996h.cn/files" data-themeColor="{$musictheme}"  data-memory="1" data-songList="{$songList}" data-fadeOutAutoplay></div>
+    <script src="https://7star.131.996h.cn/files/js/xf-MusicPlayer.min.js"></script>
 HTML;
         }
         //语言国际化
