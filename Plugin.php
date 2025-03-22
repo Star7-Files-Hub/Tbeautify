@@ -59,6 +59,10 @@ HTML;
         //樱花飘落特效
         $cherry = new Typecho_Widget_Helper_Form_Element_Radio("cherry", ['关闭', '开启'], 0, '樱花飘落特效：', '提示：会影响到阅读体验，视情况开启');
         $form->addInput($cherry);
+
+        //雪花飘落特效
+        $snow = new Typecho_Widget_Helper_Form_Element_Radio("snow", ['关闭', '开启'], 0, '雪花飘落特效：', '提示：会影响到阅读体验，视情况开启');
+        $form->addInput($snow);
         
          //国际化
         $languageTitle = new Typecho_Widget_Helper_Layout();
@@ -81,9 +85,13 @@ HTML;
         $mouseTitle->html('<h3>鼠标点击特效配置:</h3>');
         $form->addItem($mouseTitle);
         $showMouse = new Typecho_Widget_Helper_Form_Element_Checkbox('showMouse', array('showMouse' => '开启鼠标点击效果'), array(), '是否开启鼠标点击效果');
-        $mousejs = array_map('basename', glob(dirname(__FILE__) . '/static/mousejs/*.js'));
-        $mousejs = array_combine($mousejs, $mousejs);
-        $mouse = new Typecho_Widget_Helper_Form_Element_Select('mousename', $mousejs, 'mousefire', '选择鼠标点击效果',"可选鼠标点击特效：mouselove 爱心特效;mouseword 文字特效;mousefire 烟花特效;mousestar 星星拖尾特效");
+        $mousejs = array(
+            'mouselove.js' => '爱心特效',
+            'mouseword.js' => '文字特效',
+            'mousefire.js' => '烟花特效',
+            'mousestar.js' => '星星拖尾特效'
+        );
+        $mouse = new Typecho_Widget_Helper_Form_Element_Select('mousename', $mousejs, 'mouselove.js', '选择鼠标点击效果',"可选鼠标点击特效：爱心特效;文字特效;烟花特效;星星拖尾特效");
         $form->addInput($showMouse);
         $form->addInput($mouse);
         
@@ -175,7 +183,7 @@ HTML;
         $songList = !empty($userSongList) ? $userSongList : $defaultSongList;
         if($musicshow){
              echo <<<HTML
-    <div id="xf-MusicPlayer" data-cdnName="https://7star.131.996h.cn/files" data-themeColor="{$musictheme}"  data-memory="1" data-songList="{$songList}" data-fadeOutAutoplay></div>
+    <div id="xf-MusicPlayer" data-cdnName="https://7star.131.996h.cn/files" data-themeColor="{$musictheme}"  data-memory="1" data-songList="{$songList}" data-fadeOutAutoplay data-random="true"></div>
     <script src="https://7star.131.996h.cn/files/js/xf-MusicPlayer.min.js"></script>
 HTML;
         }
@@ -238,6 +246,14 @@ HTML;
         $cherry = Helper::options()->plugin('Tbeautify')->cherry;
         if($cherry==1){   
             $jsUrl = Helper::options()->pluginUrl . '/Tbeautify/static/Blossom.js';
+            echo <<<HTML
+<script type="text/javascript" src="{$jsUrl}"></script>
+HTML;
+        }
+        //雪花飘落特效
+        $snow = Helper::options()->plugin('Tbeautify')->snow;
+        if($snow==1){   
+            $jsUrl = Helper::options()->pluginUrl . '/Tbeautify/static/snow.js';
             echo <<<HTML
 <script type="text/javascript" src="{$jsUrl}"></script>
 HTML;
