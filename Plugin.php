@@ -112,12 +112,7 @@ HTML;
         );
         $musictheme = new Typecho_Widget_Helper_Form_Element_Select('musictheme', $mstyle, 'xf-original', '选择主题效果',"提供了多种不同主题色样式，请根据网站主题色选择契合的播放器主题色");
         $form->addInput($musictheme);
-        // $msource = array(
-            // '163' => '网易云音乐',
-            // 'local' => '本地'
-        // );
-        // $musicsource = new Typecho_Widget_Helper_Form_Element_Select('musicsource', $msource, '163', '选择音乐来源',"提供了多种不同音乐来源，请按需选择");
-        // $form->addInput($musicsource);
+
         $userSongList = new Typecho_Widget_Helper_Form_Element_Text("songList", null, '', '网易云歌单ID：', '留空默认为作者的歌单，如使用本地源无需填写');
         $form->addInput($userSongList);
         //看板娘
